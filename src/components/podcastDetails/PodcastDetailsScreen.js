@@ -54,7 +54,7 @@ const PodcastDetailsScreen = ({route, navigation}) => {
   }, []);
 
   return (
-    <Box f={1}>
+    <Box f={1} style={s.bgWhite}>
       {loading ? (
         <Box f={1} center h={300}>
           <ActivityIndicator size="large" color="#00ff00" />
@@ -136,6 +136,9 @@ const s = StyleSheet.create({
     height: 100,
     width: 100,
     borderRadius: 10,
+  },
+  bgWhite: {
+    backgroundColor: 'white',
   },
   title: {
     flex: 1,
