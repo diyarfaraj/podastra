@@ -1,7 +1,7 @@
 import TrackPlayer from 'react-native-track-player';
 
 export default async function trackPlayerServices() {
-  console.log('HAHAHAH');
+  console.log('HAHAHAH FROM TRACKPLAYER SERVICE');
   TrackPlayer.addEventListener('remote-play', () => TrackPlayer.play());
 
   TrackPlayer.addEventListener('remote-pause', () => TrackPlayer.pause());

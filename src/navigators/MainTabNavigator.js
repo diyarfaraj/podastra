@@ -1,5 +1,8 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  createBottomTabNavigator,
+  BottomTabBar,
+} from '@react-navigation/bottom-tabs';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import ListenNowScreen from '../components/listenNow/ListenNowScreen';
@@ -7,6 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SearchScreen from '../components/search/SearchScreen';
 import LibraryScreen from '../components/library/LibraryScreen';
 import PodcastDetailsScreen from '../components/podcastDetails/PodcastDetailsScreen';
+import MiniPlayer from '../components/miniPlayer/MiniPlayer';
 
 const MainTab = createBottomTabNavigator();
 const ICON_SIZE = 24;
@@ -51,7 +55,14 @@ const LibraryStackNavigator = () => {
 
 const MainTabNavigator = () => {
   return (
-    <MainTab.Navigator tabBarOptions={{activeTintColor: 'green'}}>
+    <MainTab.Navigator
+      tapBar={(tabsProps) => (
+        <>
+          <MiniPlayer />
+          <BottomTabBar {...tabsProps} />
+        </>
+      )}
+      tabBarOptions={{activeTintColor: 'green'}}>
       <MainTab.Screen
         options={{title: 'Listen Now'}}
         name="Listen Now"
