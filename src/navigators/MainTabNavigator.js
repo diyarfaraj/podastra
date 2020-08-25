@@ -56,7 +56,7 @@ const LibraryStackNavigator = () => {
 const MainTabNavigator = () => {
   return (
     <MainTab.Navigator
-      tapBar={(tabsProps) => (
+      tabBar={(tabsProps) => (
         <>
           <MiniPlayer />
           <BottomTabBar {...tabsProps} />

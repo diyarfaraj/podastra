@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Box, Text} from 'react-native-design-utility';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Image, ActivityIndicator} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {usePlayerContext} from '../../contexts/PlayerContext';
 
 const getReadableDate = (date) => {
   let d = new Date(date);
@@ -24,6 +25,7 @@ const getHoursAndMins = (d) => {
 };
 
 const PodcastDetailsScreen = ({route, navigation}) => {
+  const playerContext = usePlayerContext();
   const currenPodcast = route.params;
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
@@ -111,18 +113,34 @@ const PodcastDetailsScreen = ({route, navigation}) => {
             </Box>
           )}
           renderItem={({item}) => (
-            <Box px="sm">
-              <Text size="xs" color="grey">
-                {getReadableDate(item.pub_date_ms)}
-              </Text>
-              <Text bold>{item.title}</Text>
-              <Text size="sm" color="grey" numberOfLines={2}>
-                {item.description}
-              </Text>
-              <Text size="sm" color="grey" numberOfLines={2}>
-                {getHoursAndMins(item.audio_length_sec)}
-              </Text>
-            </Box>
+            <TouchableOpacity
+              onPress={() => {
+                const el = item;
+                if (!el) {
+                  return;
+                }
+
+                playerContext.play({
+                  title: el.title,
+                  artwork: el.image,
+                  id: el.id,
+                  url: el.link,
+                  artist: el.title,
+                });
+              }}>
+              <Box px="sm">
+                <Text size="xs" color="grey">
+                  {getReadableDate(item.pub_date_ms)}
+                </Text>
+                <Text bold>{item.title}</Text>
+                <Text size="sm" color="grey" numberOfLines={2}>
+                  {item.description}
+                </Text>
+                <Text size="sm" color="grey" numberOfLines={2}>
+                  {getHoursAndMins(item.audio_length_sec)}
+                </Text>
+              </Box>
+            </TouchableOpacity>
           )}
           keyExtractor={(item) => item.id}
         />

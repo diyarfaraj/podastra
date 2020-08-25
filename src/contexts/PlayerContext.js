@@ -33,6 +33,13 @@ export const PlayerContextProvider = (props) => {
   }, []);
 
   const play = async (track) => {
+    if (!track) {
+      if (currentTrack) {
+        await RNTrackPlayer.play();
+      }
+      return;
+    }
+
     await RNTrackPlayer.add([track]);
     setCurrentTrack(track);
     await RNTrackPlayer.play();
