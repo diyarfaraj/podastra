@@ -11,6 +11,7 @@ import SearchScreen from '../components/search/SearchScreen';
 import LibraryScreen from '../components/library/LibraryScreen';
 import PodcastDetailsScreen from '../components/podcastDetails/PodcastDetailsScreen';
 import MiniPlayer from '../components/miniPlayer/MiniPlayer';
+import EpisodeDetailsScreen from '../components/episodeDetails/EpisodeDetailsScreen';
 
 const MainTab = createBottomTabNavigator();
 const ICON_SIZE = 24;
@@ -28,6 +29,21 @@ const ListenNowStackNavigator = () => {
   );
 };
 
+const PodcastStack = createStackNavigator();
+const PodcastStackNavigator = () => {
+  return (
+    <PodcastStack.Navigator>
+      <PodcastStack.Screen
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
+      />
+      <PodcastStack.Screen
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
+      />
+    </PodcastStack.Navigator>
+  );
+};
 const SearchStack = createStackNavigator();
 
 const SearchStackNavigator = () => {
@@ -36,8 +52,8 @@ const SearchStackNavigator = () => {
       <SearchStack.Screen name="Search" component={SearchScreen} />
       <SearchStack.Screen
         name="PodcastDetails"
-        component={PodcastDetailsScreen}
-        options={{headerTitle: ''}}
+        component={PodcastStackNavigator}
+        options={{headerTitle: '', headerBackTitle: 'Back'}}
       />
     </SearchStack.Navigator>
   );

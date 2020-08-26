@@ -4,28 +4,13 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Image, ActivityIndicator} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {usePlayerContext} from '../../contexts/PlayerContext';
+import {useNavigation} from '@react-navigation/native';
+import GetHoursAndMins from '../../lib/helpers/GetHoursAndMins';
+import GetReadableDate from '../../lib/helpers/GetReadableDate';
 
-const getReadableDate = (date) => {
-  let d = new Date(date);
-  let realDate =
-    d.toLocaleString().substr(0, 10) + d.toLocaleString().substr(-5);
-  return realDate;
-};
-
-const getHoursAndMins = (d) => {
-  d = Number(d);
-  let h = Math.floor(d / 3600);
-  let m = Math.floor((d % 3600) / 60);
-  let s = Math.floor((d % 3600) % 60);
-
-  let hDisplay = h > 0 ? h + (h == 1 ? 'hr, ' : 'hrs, ') : '';
-  let mDisplay = m > 0 ? m + (m == 1 ? 'min ' : 'mins ') : '';
-
-  return hDisplay + mDisplay;
-};
-
-const PodcastDetailsScreen = ({route, navigation}) => {
+const PodcastDetailsScreen = ({route}) => {
   const playerContext = usePlayerContext();
+  const navigation = useNavigation();
   const currenPodcast = route.params;
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
@@ -95,7 +80,6 @@ const PodcastDetailsScreen = ({route, navigation}) => {
                   <Text size="sm">Lastest episode </Text>
                 </Box>
               </Box>
-
               <Box mb="md" px="sm">
                 <Text bold size="lg">
                   Episodes
@@ -113,34 +97,27 @@ const PodcastDetailsScreen = ({route, navigation}) => {
             </Box>
           )}
           renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() => {
-                const el = item;
-                if (!el) {
-                  return;
-                }
-
-                playerContext.play({
-                  title: el.title,
-                  artwork: el.image,
-                  id: el.id,
-                  url: el.link,
-                  artist: el.title,
-                });
-              }}>
-              <Box px="sm">
-                <Text size="xs" color="grey">
-                  {getReadableDate(item.pub_date_ms)}
-                </Text>
+            <Box px="sm">
+              <Text size="xs" color="grey">
+                {GetReadableDate(item.pub_date_ms)}
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('EpisodeDetails', {
+                    episode: item,
+                    podcast: currenPodcast,
+                  })
+                }>
                 <Text bold>{item.title}</Text>
-                <Text size="sm" color="grey" numberOfLines={2}>
-                  {item.description}
-                </Text>
-                <Text size="sm" color="grey" numberOfLines={2}>
-                  {getHoursAndMins(item.audio_length_sec)}
-                </Text>
-              </Box>
-            </TouchableOpacity>
+              </TouchableOpacity>
+
+              <Text size="sm" color="grey" numberOfLines={2}>
+                {item.description}
+              </Text>
+              <Text size="sm" color="grey" numberOfLines={2}>
+                {GetHoursAndMins(item.audio_length_sec)}
+              </Text>
+            </Box>
           )}
           keyExtractor={(item) => item.id}
         />

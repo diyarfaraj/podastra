@@ -34,6 +34,7 @@ export const PlayerContextProvider = (props) => {
     };
   }, []);
 
+  //play
   const play = async (track) => {
     if (!track) {
       if (currentTrack) {
@@ -42,10 +43,16 @@ export const PlayerContextProvider = (props) => {
       return;
     }
 
+    if (currentTrack && track.id !== currentTrack.id) {
+      await RNTrackPlayer.reset();
+    }
+
     await RNTrackPlayer.add([track]);
     setCurrentTrack(track);
     await RNTrackPlayer.play();
   };
+
+  //pause
   const pause = async () => {
     await RNTrackPlayer.pause();
   };
