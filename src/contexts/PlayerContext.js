@@ -4,6 +4,7 @@ import RNTrackPlayer, {
   STATE_PLAYING,
   STATE_PAUSED,
   STATE_STOPPED,
+  seekTo,
 } from 'react-native-track-player';
 
 export const PlayerContext = createContext(() => {
@@ -14,6 +15,7 @@ export const PlayerContext = createContext(() => {
   currentTrack: null;
   play: () => null;
   pause: () => null;
+  seekTo: () => null;
 });
 
 export const PlayerContextProvider = (props) => {
@@ -47,6 +49,12 @@ export const PlayerContextProvider = (props) => {
   const pause = async () => {
     await RNTrackPlayer.pause();
   };
+
+  const seekTo = async (amount = 30) => {
+    const position = await RNTrackPlayer.getPosition();
+    await RNTrackPlayer.seekTo(position + amount);
+  };
+
   const value = {
     isPlaying: playerState === STATE_PLAYING,
     isPaused: playerState === STATE_PAUSED,
@@ -55,6 +63,7 @@ export const PlayerContextProvider = (props) => {
     currentTrack,
     pause,
     play,
+    seekTo,
   };
 
   return (
