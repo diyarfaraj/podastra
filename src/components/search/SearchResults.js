@@ -18,12 +18,7 @@ const SearchResults = ({item}) => {
           {item.publisher_original}
         </Text>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('PodcastDetails', {
-              screen: 'PodcastDetails',
-              params: item,
-            })
-          }>
+          onPress={() => navigation.navigate('PodcastDetails', {params: item})}>
           <Text style={s.episodesStyle} size="xs" color="green">
             Episodes: {item.total_episodes}
           </Text>

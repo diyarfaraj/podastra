@@ -1,12 +1,13 @@
 import React from 'react';
 import {Box, Text} from 'react-native-design-utility';
 import {useRoute} from '@react-navigation/native';
-import {Image, ScrollView, TouchableOpacity} from 'react-native';
+import {Image, ScrollView, TouchableOpacity, Linking} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-
+import HTML from 'react-native-render-html';
 import {theme} from '../../constants/theme';
 import {usePlayerContext} from '../../contexts/PlayerContext';
 import GetHoursAndMins from '../../lib/helpers/GetHoursAndMins';
+import HtmlReader from '../HtmlReader';
 
 const EpisodeDetailsScreen = () => {
   const routeParams = useRoute().params;
@@ -68,7 +69,7 @@ const EpisodeDetailsScreen = () => {
             <Text size="xl" weight="bold">
               Episode Notes
             </Text>
-            <Text>{routeParams.episode.description}</Text>
+            <HtmlReader html={routeParams.episode.description} />
           </Box>
         </Box>
       </ScrollView>

@@ -29,31 +29,25 @@ const ListenNowStackNavigator = () => {
   );
 };
 
-const PodcastStack = createStackNavigator();
-const PodcastStackNavigator = () => {
-  return (
-    <PodcastStack.Navigator>
-      <PodcastStack.Screen
-        name="PodcastDetails"
-        component={PodcastDetailsScreen}
-      />
-      <PodcastStack.Screen
-        name="EpisodeDetails"
-        component={EpisodeDetailsScreen}
-      />
-    </PodcastStack.Navigator>
-  );
-};
 const SearchStack = createStackNavigator();
 
 const SearchStackNavigator = () => {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator
+      screenOptions={{
+        headerBackTitle: 'Back',
+      }}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
+
       <SearchStack.Screen
         name="PodcastDetails"
-        component={PodcastStackNavigator}
-        options={{headerTitle: '', headerBackTitle: 'Back'}}
+        component={PodcastDetailsScreen}
+        options={{headerTitle: ''}}
+      />
+      <SearchStack.Screen
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
+        options={{headerTitle: ''}}
       />
     </SearchStack.Navigator>
   );

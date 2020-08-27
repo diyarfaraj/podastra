@@ -11,12 +11,11 @@ import GetReadableDate from '../../lib/helpers/GetReadableDate';
 const PodcastDetailsScreen = ({route}) => {
   const playerContext = usePlayerContext();
   const navigation = useNavigation();
-  const currenPodcast = route.params;
+  const currenPodcast = route.params.params;
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
   const isMounted = useRef(true);
   const [errorMessage, setErrorMessage] = useState('');
-
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
 
   const getEpisodes = async () => {
@@ -112,9 +111,12 @@ const PodcastDetailsScreen = ({route}) => {
               </TouchableOpacity>
 
               <Text size="sm" color="grey" numberOfLines={2}>
-                {item.description}
+                {item.description.replace(
+                  /<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g,
+                  '',
+                )}
               </Text>
-              <Text size="sm" color="grey" numberOfLines={2}>
+              <Text size="sm" color="grey" numberOfLines={2} mt={5}>
                 {GetHoursAndMins(item.audio_length_sec)}
               </Text>
             </Box>
