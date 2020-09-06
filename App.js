@@ -1,4 +1,6 @@
+//@refresh reset
 import React, {useEffect, useState} from 'react';
+
 import 'react-native-gesture-handler';
 import {Box, Text, UtilityThemeProvider} from 'react-native-design-utility';
 import {theme} from './src/constants/theme';
@@ -7,7 +9,7 @@ import MainStackNavigator from './src/navigators/MainStackNavigator';
 
 import TrackPlayer from 'react-native-track-player';
 import {PlayerContextProvider} from './src/contexts/PlayerContext';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, LogBox} from 'react-native';
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);

@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
+import fireDb from '../../services/firebaseDb';
+
 import {Box, Text} from 'react-native-design-utility';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Image, ActivityIndicator} from 'react-native';
@@ -7,6 +9,7 @@ import {usePlayerContext} from '../../contexts/PlayerContext';
 import {useNavigation} from '@react-navigation/native';
 import GetHoursAndMins from '../../lib/helpers/GetHoursAndMins';
 import GetReadableDate from '../../lib/helpers/GetReadableDate';
+import {Value} from 'react-native-reanimated';
 
 const PodcastDetailsScreen = ({route}) => {
   const playerContext = usePlayerContext();
@@ -17,6 +20,15 @@ const PodcastDetailsScreen = ({route}) => {
   const isMounted = useRef(true);
   const [errorMessage, setErrorMessage] = useState('');
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
+
+  const subscribeToPodcast = (podcast) => {
+    fireDb.child('id').push(podcast.id);
+    fireDb.child('thumbnail').push(podcast.thumbnail);
+    fireDb.child('name').push(podcast.title_original);
+    fireDb.child('totalEpisodes').push(podcast.total_episodes);
+    fireDb.child('artist').push(podcast.publisher_original);
+    fireDb.child('feedUrl').push(podcast.listennotes_url);
+  };
 
   const getEpisodes = async () => {
     setLoading(true);
@@ -65,9 +77,12 @@ const PodcastDetailsScreen = ({route}) => {
                   <Text size="sm" color="grey">
                     {currenPodcast.publisher_original}
                   </Text>
-                  <Text color="green" size="sm">
-                    Subcribed
-                  </Text>
+                  <TouchableOpacity
+                    onPress={() => subscribeToPodcast(currenPodcast)}>
+                    <Text color="green" size="sm">
+                      Subcribed
+                    </Text>
+                  </TouchableOpacity>
                 </Box>
               </Box>
               <Box px="sm" mb="md" dir="row" align="center">

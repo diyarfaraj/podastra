@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "504707347721",
+    "firebase_url": "https://podastra-47a13.firebaseio.com",
+    "project_id": "podastra-47a13",
+    "storage_bucket": "podastra-47a13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504707347721:android:608fdcd4bef9d81c940fd8",
+        "android_client_info": {
+          "package_name": "com.podastra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504707347721-lhlu94l0ls71rtppu6qm9jfuce50jas7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBv5HNzJ94gbScq6vinu-vdy-dp4SIVh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504707347721-lhlu94l0ls71rtppu6qm9jfuce50jas7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
