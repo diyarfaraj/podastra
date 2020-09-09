@@ -22,12 +22,16 @@ const PodcastDetailsScreen = ({route}) => {
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
 
   const subscribeToPodcast = (podcast) => {
-    fireDb.child('id').push(podcast.id);
-    fireDb.child('thumbnail').push(podcast.thumbnail);
-    fireDb.child('name').push(podcast.title_original);
-    fireDb.child('totalEpisodes').push(podcast.total_episodes);
-    fireDb.child('artist').push(podcast.publisher_original);
-    fireDb.child('feedUrl').push(podcast.listennotes_url);
+    const podcastObj = {
+      id: podcast.id,
+      name: podcast.title_original,
+      artist: podcast.publisher_original,
+      feedUrl: podcast.listennotes_url,
+      totalEpisodes: podcast.total_episodes,
+      thumbnail: podcast.thumbnail,
+    };
+
+    fireDb.child('podcasts').push(podcastObj);
   };
 
   const getEpisodes = async () => {

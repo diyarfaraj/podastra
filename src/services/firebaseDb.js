@@ -16,4 +16,4 @@ var firebaseConfig = {
 
 export default !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
-  : firebase.database().ref();
+  : firebase.database().ref().child('podastra');
