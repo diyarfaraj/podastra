@@ -5,20 +5,32 @@ import fireDb from '../../services/firebaseDb';
 const podcastIds = [];
 
 const LibraryScreen = () => {
-  fireDb.child('podcasts').on('value', function (snapshot) {
+  fireDb
+    .database()
+    .ref()
+    .child('podastra')
+    .child('podcasts')
+    .on('value', function (snapshot) {
+      snapshot.forEach(function (childSnapshot) {
+        var childData = childSnapshot.val();
+        podcastIds.push(childData);
+      });
+    });
+
+  /*  fireDb.child('podcasts').on('value', function (snapshot) {
     snapshot.forEach(function (childSnapshot) {
       var childData = childSnapshot.val();
       podcastIds.push(childData);
     });
-  });
+  }); */
 
   return (
-    <Box f={1} center>
-      {podcastIds.forEach((element) => {
-        <Text size="lg" color="red">
-          {element.name}
-        </Text>;
-      })}
+    <Box f={1}>
+      {podcastIds.map((podcast) => (
+        <Box key={podcast.id} bg="white" mb="md" p="sm">
+          <Text>{podcast.name}</Text>
+        </Box>
+      ))}
     </Box>
   );
 };

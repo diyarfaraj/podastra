@@ -21,7 +21,7 @@ const PodcastDetailsScreen = ({route}) => {
   const [errorMessage, setErrorMessage] = useState('');
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
 
-  const subscribeToPodcast = (podcast) => {
+  const subscribeToPodcast = async (podcast) => {
     const podcastObj = {
       id: podcast.id,
       name: podcast.title_original,
@@ -31,7 +31,12 @@ const PodcastDetailsScreen = ({route}) => {
       thumbnail: podcast.thumbnail,
     };
 
-    fireDb.child('podcasts').push(podcastObj);
+    await fireDb
+      .database()
+      .ref()
+      .child('podastra')
+      .child('podcasts')
+      .push(podcastObj);
   };
 
   const getEpisodes = async () => {
