@@ -10,6 +10,8 @@ target 'podastra' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+
   target 'podastraTests' do
     inherit! :complete
     # Pods for testing

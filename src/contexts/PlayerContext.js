@@ -62,6 +62,10 @@ export const PlayerContextProvider = (props) => {
     await RNTrackPlayer.seekTo(position + amount);
   };
 
+  const goTo = async (amount) => {
+    await RNTrackPlayer.seekTo(amount);
+  };
+
   const value = {
     isPlaying: playerState === STATE_PLAYING,
     isPaused: playerState === STATE_PAUSED,
@@ -71,6 +75,7 @@ export const PlayerContextProvider = (props) => {
     pause,
     play,
     seekTo,
+    goTo,
   };
 
   return (

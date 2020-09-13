@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {usePlayerContext} from '../../contexts/PlayerContext';
 import {theme} from '../../constants/theme';
+import ProgressSlider from './ProgressSlider';
 
 const {width} = Dimensions.get('window');
 
@@ -22,7 +23,7 @@ const PlayerScreen = () => {
 
   return (
     <SafeAreaView style={s.safeArea}>
-      <Box f={1} bg="#c9df8a" pt="md">
+      <Box f={1} bg="white" pt="md">
         <Box px="md" mb="md">
           <TouchableOpacity
             onPress={navigation.goBack}
@@ -45,6 +46,10 @@ const PlayerScreen = () => {
           <Text color="grey" size="sm">
             {track.artist}
           </Text>
+        </Box>
+
+        <Box>
+          <ProgressSlider />
         </Box>
 
         <Box dir="row" align="center" justify="center">
