@@ -3,25 +3,24 @@ import {Box, Text} from 'react-native-design-utility';
 import fireDb from '../../services/firebaseDb';
 import {useNavigation} from '@react-navigation/native';
 
-import {TouchableOpacity} from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 
 const LibraryScreen = () => {
   const navigation = useNavigation();
   const [podcastIds, setPodcastIds] = React.useState([]);
-
-  //https://www.youtube.com/watch?v=rSgbYCdc4G0&ab_channel=BaylorBreaksItDown
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    /*  fireDb.child('podcasts').on('value', function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-      var childData = childSnapshot.val();
-      podcastIds.push(childData);
-    });
-  }); */
     getPodcasts();
   }, []);
 
   const getPodcasts = async () => {
+    setLoading(true);
     await fireDb
       .database()
       .ref()
@@ -31,25 +30,57 @@ const LibraryScreen = () => {
         if (snapshot && snapshot.exists()) {
           //Set values in state which can be extracted in jsx in render.
           setPodcastIds(Object.values(snapshot.val()));
-          //podcastIds.map((p) => console.log(p.name));
         }
       });
+    setLoading(false);
   };
 
   return (
-    <Box f={1}>
-      {podcastIds.map((podcast) => (
-        <Box key={podcast.id} bg="white" mb="md" p="sm">
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('PodcastDetails', {params: podcastIds})
-            }>
-            <Text>{podcast.name}</Text>
-          </TouchableOpacity>
+    <Box style={s.podcasts}>
+      {loading ? (
+        <Box f={1} center h={300}>
+          <ActivityIndicator size="large" color="#00ff00" />
         </Box>
-      ))}
+      ) : (
+        podcastIds.map((podcast) => (
+          <Box key={podcast.id} bg="white" mb="md" p="sm" style={s.eachPodcast}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('PodcastDetails', {
+                  params: podcast,
+                })
+              }>
+              {/* <Text>{podcast.name}</Text> */}
+              <Image source={{uri: podcast.thumbnail}} style={s.thumbnail} />
+            </TouchableOpacity>
+          </Box>
+        ))
+      )}
     </Box>
   );
 };
+
+const s = StyleSheet.create({
+  thumbnail: {
+    height: 110,
+    width: 110,
+    borderRadius: 10,
+  },
+  bgWhite: {
+    backgroundColor: 'white',
+  },
+  title: {
+    flex: 1,
+  },
+  podcasts: {
+    display: 'flex',
+    direction: 'ltr',
+    flexWrap: 'wrap',
+    alignContent: 'stretch',
+  },
+  eachPodcast: {
+    width: 140,
+  },
+});
 
 export default LibraryScreen;

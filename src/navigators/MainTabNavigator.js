@@ -64,6 +64,11 @@ const LibraryStackNavigator = () => {
         component={PodcastDetailsScreen}
         options={{headerTitle: ''}}
       />
+      <LibraryStack.Screen
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
+        options={{headerTitle: ''}}
+      />
     </LibraryStack.Navigator>
   );
 };

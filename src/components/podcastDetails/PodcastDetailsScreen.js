@@ -14,6 +14,7 @@ const PodcastDetailsScreen = ({route}) => {
   const playerContext = usePlayerContext();
   const navigation = useNavigation();
   const currenPodcast = route.params.params;
+
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
   const isMounted = useRef(true);
