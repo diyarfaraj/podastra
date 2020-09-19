@@ -9,7 +9,6 @@ import {usePlayerContext} from '../../contexts/PlayerContext';
 import {useNavigation} from '@react-navigation/native';
 import GetHoursAndMins from '../../lib/helpers/GetHoursAndMins';
 import GetReadableDate from '../../lib/helpers/GetReadableDate';
-import {Value} from 'react-native-reanimated';
 
 const PodcastDetailsScreen = ({route}) => {
   const playerContext = usePlayerContext();

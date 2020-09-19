@@ -59,6 +59,11 @@ const LibraryStackNavigator = () => {
   return (
     <LibraryStack.Navigator>
       <LibraryStack.Screen name="Library" component={LibraryScreen} />
+      <LibraryStack.Screen
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
+        options={{headerTitle: ''}}
+      />
     </LibraryStack.Navigator>
   );
 };
