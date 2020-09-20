@@ -20,7 +20,6 @@ const LibraryScreen = () => {
   }, []);
 
   const getPodcasts = async () => {
-    setLoading(true);
     await fireDb
       .database()
       .ref()
@@ -28,11 +27,9 @@ const LibraryScreen = () => {
       .child('podcasts')
       .on('value', function (snapshot) {
         if (snapshot && snapshot.exists()) {
-          //Set values in state which can be extracted in jsx in render.
           setPodcastIds(Object.values(snapshot.val()));
         }
       });
-    setLoading(false);
   };
 
   return (
@@ -43,7 +40,11 @@ const LibraryScreen = () => {
         </Box>
       ) : (
         podcastIds.map((podcast) => (
-          <Box key={podcast.id} bg="white" mb="md" p="sm" style={s.eachPodcast}>
+          <Box
+            key={podcast.id}
+            bg="white"
+            /* mb="md" */ p="sm"
+            style={s.eachPodcast}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('PodcastDetails', {
@@ -53,6 +54,9 @@ const LibraryScreen = () => {
               {/* <Text>{podcast.name}</Text> */}
               <Image source={{uri: podcast.thumbnail}} style={s.thumbnail} />
             </TouchableOpacity>
+            <Text numberOfLines={1} size="xs" style={s.title}>
+              {podcast.name}
+            </Text>
           </Box>
         ))
       )}
@@ -80,6 +84,9 @@ const s = StyleSheet.create({
   },
   eachPodcast: {
     width: 140,
+  },
+  title: {
+    fontSize: 12,
   },
 });
 

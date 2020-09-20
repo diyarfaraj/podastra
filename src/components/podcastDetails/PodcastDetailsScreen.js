@@ -3,7 +3,12 @@ import fireDb from '../../services/firebaseDb';
 
 import {Box, Text} from 'react-native-design-utility';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import {StyleSheet, Image, ActivityIndicator} from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  ImageBackground,
+} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {usePlayerContext} from '../../contexts/PlayerContext';
 import {useNavigation} from '@react-navigation/native';
@@ -20,7 +25,7 @@ const PodcastDetailsScreen = ({route}) => {
   const isMounted = useRef(true);
   const [errorMessage, setErrorMessage] = useState('');
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
-
+  console.log(currenPodcast.name);
   const subscribeToPodcast = async (podcast) => {
     const podcastObj = {
       id: podcast.id,
@@ -71,6 +76,9 @@ const PodcastDetailsScreen = ({route}) => {
           ListHeaderComponent={
             <>
               <Box dir="row" px="sm" mt="sm" mb="md">
+                {/*   <ImageBackground
+                  blurRadius={12}
+                  source={{uri: currenPodcast.thumbnail}}> */}
                 {currenPodcast.thumbnail && (
                   <Box mr={10}>
                     <Image
@@ -80,12 +88,26 @@ const PodcastDetailsScreen = ({route}) => {
                   </Box>
                 )}
                 <Box style={s.title}>
-                  <Text size="lg" bold>
-                    {currenPodcast.title_original}
-                  </Text>
-                  <Text size="sm" color="grey">
-                    {currenPodcast.publisher_original}
-                  </Text>
+                  {currenPodcast.title_original ? (
+                    <Text size="lg" bold>
+                      {currenPodcast.title_original}
+                    </Text>
+                  ) : (
+                    <Text size="lg" bold>
+                      {currenPodcast.name}
+                    </Text>
+                  )}
+
+                  {currenPodcast.publisher_original ? (
+                    <Text numberOfLines={1} size="sm" color="grey">
+                      {currenPodcast.publisher_original}
+                    </Text>
+                  ) : (
+                    <Text numberOfLines={1} size="sm" color="grey">
+                      {currenPodcast.artist}
+                    </Text>
+                  )}
+
                   <TouchableOpacity
                     onPress={() => subscribeToPodcast(currenPodcast)}>
                     <Text color="green" size="sm">
@@ -93,6 +115,7 @@ const PodcastDetailsScreen = ({route}) => {
                     </Text>
                   </TouchableOpacity>
                 </Box>
+                {/* </ImageBackground> */}
               </Box>
               <Box px="sm" mb="md" dir="row" align="center">
                 <Box mr={10}>
