@@ -22,10 +22,13 @@ const PodcastDetailsScreen = ({route}) => {
 
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
+  const [subscribedPodcasts, setSubscribedPodcasts] = React.useState([]);
+
   const isMounted = useRef(true);
   const [errorMessage, setErrorMessage] = useState('');
   const api_episodes_url = `https://listen-api.listennotes.com/api/v2/podcasts/${currenPodcast.id}?sort=recent_first`;
-  console.log(currenPodcast.name);
+  //console.log(currenPodcast.id);
+  //subscribe
   const subscribeToPodcast = async (podcast) => {
     const podcastObj = {
       id: podcast.id,
@@ -44,6 +47,25 @@ const PodcastDetailsScreen = ({route}) => {
       .push(podcastObj);
   };
 
+  //unsub
+  const unsubcribePodcast = async (podcast) => {
+    var dbRef = await fireDb.database().ref(`podastra/podcasts/`);
+
+    dbRef
+      .orderByChild('id')
+      .equalTo(podcast.id)
+      .once('value')
+      .then(function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+          //remove each child
+          dbRef.child(childSnapshot.key).remove();
+          //console.log(childSnapshot);
+        });
+      });
+
+    //dbRef.remove();
+  };
+
   const getEpisodes = async () => {
     setLoading(true);
     const response = await fetch(api_episodes_url, {
@@ -57,8 +79,28 @@ const PodcastDetailsScreen = ({route}) => {
     setResults(data.episodes);
     setLoading(false);
   };
+  //get the latest podcasts from db
+  const getPodcastsFromDb = async () => {
+    await fireDb
+      .database()
+      .ref()
+      .child('podastra')
+      .child('podcasts')
+      .on('value', function (snapshot) {
+        if (snapshot && snapshot.exists()) {
+          setSubscribedPodcasts(Object.values(snapshot.val()));
+        }
+      });
+
+    if (subscribedPodcasts.some((pod) => pod.id === currenPodcast.id)) {
+      console.log('redan subed denn podcast');
+    } else {
+      console.log('inte subad');
+    }
+  };
 
   useEffect(() => {
+    getPodcastsFromDb();
     if (isMounted.current) {
       getEpisodes();
     }
@@ -76,9 +118,6 @@ const PodcastDetailsScreen = ({route}) => {
           ListHeaderComponent={
             <>
               <Box dir="row" px="sm" mt="sm" mb="md">
-                {/*   <ImageBackground
-                  blurRadius={12}
-                  source={{uri: currenPodcast.thumbnail}}> */}
                 {currenPodcast.thumbnail && (
                   <Box mr={10}>
                     <Image
@@ -107,15 +146,24 @@ const PodcastDetailsScreen = ({route}) => {
                       {currenPodcast.artist}
                     </Text>
                   )}
-
-                  <TouchableOpacity
-                    onPress={() => subscribeToPodcast(currenPodcast)}>
-                    <Text color="green" size="sm">
-                      Subcribed
-                    </Text>
-                  </TouchableOpacity>
+                  {subscribedPodcasts.some(
+                    (pod) => pod.id === currenPodcast.id,
+                  ) ? (
+                    <TouchableOpacity
+                      onPress={() => unsubcribePodcast(currenPodcast)}>
+                      <Text color="green" size="sm">
+                        Subcribed
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => subscribeToPodcast(currenPodcast)}>
+                      <Text color="black" size="sm">
+                        Subcribe
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </Box>
-                {/* </ImageBackground> */}
               </Box>
               <Box px="sm" mb="md" dir="row" align="center">
                 <Box mr={10}>

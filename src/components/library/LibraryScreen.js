@@ -20,6 +20,7 @@ const LibraryScreen = () => {
   }, []);
 
   const getPodcasts = async () => {
+    setLoading(true);
     await fireDb
       .database()
       .ref()
@@ -30,6 +31,7 @@ const LibraryScreen = () => {
           setPodcastIds(Object.values(snapshot.val()));
         }
       });
+    setLoading(false);
   };
 
   return (
@@ -40,18 +42,13 @@ const LibraryScreen = () => {
         </Box>
       ) : (
         podcastIds.map((podcast) => (
-          <Box
-            key={podcast.id}
-            bg="white"
-            /* mb="md" */ p="sm"
-            style={s.eachPodcast}>
+          <Box key={podcast.id} bg="white" p="sm" style={s.eachPodcast}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('PodcastDetails', {
                   params: podcast,
                 })
               }>
-              {/* <Text>{podcast.name}</Text> */}
               <Image source={{uri: podcast.thumbnail}} style={s.thumbnail} />
             </TouchableOpacity>
             <Text numberOfLines={1} size="xs" style={s.title}>
