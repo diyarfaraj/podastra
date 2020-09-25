@@ -51,7 +51,7 @@ const LibraryScreen = () => {
               }>
               <Image source={{uri: podcast.thumbnail}} style={s.thumbnail} />
             </TouchableOpacity>
-            <Text numberOfLines={1} size="xs" style={s.title}>
+            <Text numberOfLines={1} size="xxs" style={s.title}>
               {podcast.name}
             </Text>
           </Box>
@@ -63,8 +63,8 @@ const LibraryScreen = () => {
 
 const s = StyleSheet.create({
   thumbnail: {
-    height: 110,
-    width: 110,
+    height: 75,
+    width: 75,
     borderRadius: 10,
   },
   bgWhite: {
@@ -76,14 +76,18 @@ const s = StyleSheet.create({
   podcasts: {
     display: 'flex',
     direction: 'ltr',
+    flexDirection: 'row',
+    width: '100%',
     flexWrap: 'wrap',
     alignContent: 'stretch',
   },
   eachPodcast: {
-    width: 140,
+    width: 100,
+    marginBottom: 5,
+    marginLeft: 5,
   },
   title: {
-    fontSize: 12,
+    fontSize: 9,
   },
 });
 
