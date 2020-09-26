@@ -84,16 +84,12 @@ const MainTabNavigator = () => {
       )}
       tabBarOptions={{activeTintColor: 'green'}}>
       <MainTab.Screen
-        options={{title: 'Listen Now'}}
-        name="Listen Now"
+        options={{title: 'Explore'}}
+        name="Explore"
         component={ListenNowStackNavigator}
         options={{
           tabBarIcon: (props) => (
-            <FeatherIcon
-              color={props.color}
-              size={ICON_SIZE}
-              name="headphones"
-            />
+            <FeatherIcon color={props.color} size={ICON_SIZE} name="compass" />
           ),
         }}
       />
