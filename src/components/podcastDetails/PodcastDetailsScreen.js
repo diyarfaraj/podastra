@@ -57,13 +57,9 @@ const PodcastDetailsScreen = ({route}) => {
       .once('value')
       .then(function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
-          //remove each child
           dbRef.child(childSnapshot.key).remove();
-          //console.log(childSnapshot);
         });
       });
-
-    //dbRef.remove();
   };
 
   const getEpisodes = async () => {

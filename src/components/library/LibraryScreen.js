@@ -40,7 +40,7 @@ const LibraryScreen = () => {
       <Box h={150} backgroundColor="white" w="100%" style={s.header}>
         <Box style={s.headerIconsContiner}>
           <TouchableOpacity>
-            <Box backgroundColor="lightgrey" style={s.headerIcons}>
+            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
               <Icon name="download" size={25} color="green" />
             </Box>
           </TouchableOpacity>
@@ -48,7 +48,7 @@ const LibraryScreen = () => {
         </Box>
         <Box style={s.headerIconsContiner}>
           <TouchableOpacity>
-            <Box backgroundColor="lightgrey" style={s.headerIcons}>
+            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
               <Icon name="tv" size={25} color="green" />
             </Box>
           </TouchableOpacity>
@@ -56,7 +56,7 @@ const LibraryScreen = () => {
         </Box>
         <Box style={s.headerIconsContiner}>
           <TouchableOpacity>
-            <Box backgroundColor="lightgrey" style={s.headerIcons}>
+            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
               <Icon name="heart" size={25} color="green" />
             </Box>
           </TouchableOpacity>
@@ -64,7 +64,7 @@ const LibraryScreen = () => {
         </Box>
         <Box style={s.headerIconsContiner}>
           <TouchableOpacity>
-            <Box backgroundColor="lightgrey" style={s.headerIcons}>
+            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
               <Icon name="list" size={25} color="green" />
             </Box>
           </TouchableOpacity>
@@ -127,8 +127,8 @@ const s = StyleSheet.create({
     letterSpacing: 0.5,
   },
   header: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 5,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 3,
     display: 'flex',
     direction: 'ltr',
     flexDirection: 'row',
