@@ -77,9 +77,9 @@ const LibraryScreen = () => {
           <ActivityIndicator size="large" color="#00ff00" />
         </Box>
       ) : (
-        podcastIds.map((podcast) => (
+        podcastIds.map((podcast, i) => (
           <Box style={s.podcastsContainer}>
-            <Box key={podcast.id} p="sm" style={s.eachPodcast}>
+            <Box key={i} p="sm" style={s.eachPodcast}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('PodcastDetails', {

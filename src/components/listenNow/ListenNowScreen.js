@@ -7,16 +7,23 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const ListenNowScreen = () => {
   const [results, setResults] = React.useState([]);
+  const [comedyResults, setComedyResults] = React.useState([]);
+  const [finResults, setFinResults] = React.useState([]);
+
   const [loading, setLoading] = React.useState(false);
 
   const isMounted = React.useRef(true);
 
   const api_toppodcasts_url = `https://listen-api.listennotes.com/api/v2/best_podcasts?page=1&region=se&safe_mode=0`;
+  const api_top_comedy_podcasts_url = `https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=133&region=se&safe_mode=0`;
+  const api_top_fin_podcasts_url = `https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=93&region=se&safe_mode=0`;
 
   const getTopPodcasts = async () => {
     setLoading(true);
@@ -32,8 +39,42 @@ const ListenNowScreen = () => {
     setLoading(false);
   };
 
+  const getComedyTopPodcasts = async () => {
+    setLoading(true);
+    const response = await fetch(api_top_comedy_podcasts_url, {
+      method: 'GET',
+      headers: {'X-ListenAPI-Key': `ae87cec695cc4454a601639d06c9274a`},
+    }).catch((error) => {
+      console.error('opps error in fetching episodes api', error);
+      setErrorMessage('something went wrongg in getting com podcasts');
+    });
+    const data = await response.json();
+    setComedyResults(data.podcasts);
+    setLoading(false);
+  };
+
+  const getFinTopPodcasts = async () => {
+    setLoading(true);
+    const response = await fetch(api_top_fin_podcasts_url, {
+      method: 'GET',
+      headers: {'X-ListenAPI-Key': `ae87cec695cc4454a601639d06c9274a`},
+    }).catch((error) => {
+      console.error('opps error in fetching episodes api', error);
+      setErrorMessage('something went wrongg in getting fin podcasts');
+    });
+    const data = await response.json();
+    setFinResults(data.podcasts);
+    setLoading(false);
+  };
+
   React.useEffect(() => {
-    getTopPodcasts();
+    if (isMounted.current) {
+      getTopPodcasts();
+      getComedyTopPodcasts();
+      getFinTopPodcasts();
+      console.log('top podcast', topPodcasts);
+    }
+    return () => (isMounted.current = false);
   }, []);
 
   const topPodcasts = [];
@@ -47,60 +88,139 @@ const ListenNowScreen = () => {
   });
 
   return (
-    <Box>
-      <Box h={250}>
-        <TimedSlideshow
-          items={topPodcasts}
-          extraSpacing={0}
-          showProgressBar={false}
-        />
-      </Box>
-      <Box h={90} backgroundColor="white" w="100%" style={s.header}>
-        <Box style={s.headerIconsContiner}>
-          <TouchableOpacity>
-            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
-              <Icon name="download" size={17} color="green" />
-            </Box>
-          </TouchableOpacity>
-          <Text style={s.iconsText}>Categories</Text>
+    <ScrollView>
+      <Box>
+        <Box h={370}>
+          <TimedSlideshow
+            items={topPodcasts}
+            extraSpacing={0}
+            showProgressBar={false}
+            renderCloseIcon={() => null}
+            footerStyle
+          />
         </Box>
-        <Box style={s.headerIconsContiner}>
-          <TouchableOpacity>
-            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
-              <Icon name="tv" size={17} color="green" />
-            </Box>
-          </TouchableOpacity>
-          <Text style={s.iconsText}>Network</Text>
-        </Box>
-        <Box style={s.headerIconsContiner}>
-          <TouchableOpacity>
-            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
-              <Icon name="heart" size={17} color="green" />
-            </Box>
-          </TouchableOpacity>
-          <Text style={s.iconsText}>Radio</Text>
-        </Box>
-        <Box style={s.headerIconsContiner}>
-          <TouchableOpacity>
-            <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
-              <Icon name="list" size={17} color="green" />
-            </Box>
-          </TouchableOpacity>
+        <Box h={90} backgroundColor="white" w="100%" style={s.header}>
+          <Box style={s.headerIconsContiner}>
+            <TouchableOpacity>
+              <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
+                <Icon name="download" size={17} color="green" />
+              </Box>
+            </TouchableOpacity>
+            <Text style={s.iconsText}>Categories</Text>
+          </Box>
+          <Box style={s.headerIconsContiner}>
+            <TouchableOpacity>
+              <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
+                <Icon name="tv" size={17} color="green" />
+              </Box>
+            </TouchableOpacity>
+            <Text style={s.iconsText}>Network</Text>
+          </Box>
+          <Box style={s.headerIconsContiner}>
+            <TouchableOpacity>
+              <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
+                <Icon name="heart" size={17} color="green" />
+              </Box>
+            </TouchableOpacity>
+            <Text style={s.iconsText}>Radio</Text>
+          </Box>
+          <Box style={s.headerIconsContiner}>
+            <TouchableOpacity>
+              <Box backgroundColor="#eaf9ea" style={s.headerIcons}>
+                <Icon name="list" size={17} color="green" />
+              </Box>
+            </TouchableOpacity>
 
-          <Text style={s.iconsText}>Audiobooks</Text>
+            <Text style={s.iconsText}>Audiobooks</Text>
+          </Box>
+        </Box>
+        <Box
+          display="flex"
+          backgroundColor="white"
+          borderBottomWidth={2}
+          borderBottomColor="lightgrey">
+          <Text pl={18} mt={5}>
+            Comedy Podcasts
+          </Text>
+          {loading ? (
+            <Box f={1} center h={300}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </Box>
+          ) : (
+            <FlatList
+              data={comedyResults.slice(0, 4)}
+              numColumns={4}
+              keyExtractor={(res) => res.id}
+              renderItem={({item}) => (
+                <Box style={s.podcastsContainer}>
+                  <Box key={item.id} p="sm" style={s.eachPodcast}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('PodcastDetails', {
+                          params: podcast,
+                        })
+                      }>
+                      <Image
+                        source={{uri: item.thumbnail}}
+                        style={s.thumbnail}
+                      />
+                    </TouchableOpacity>
+                    <Text numberOfLines={2} size="s" style={s.title}>
+                      {item.title}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+            />
+          )}
+        </Box>
+        <Box
+          display="flex"
+          backgroundColor="white"
+          borderBottomWidth={2}
+          borderBottomColor="lightgrey">
+          <Text pl={18}>Business Podcasts</Text>
+          {loading ? (
+            <Box f={1} center h={300}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </Box>
+          ) : (
+            <FlatList
+              data={finResults.slice(0, 4)}
+              numColumns={4}
+              keyExtractor={(res) => res.id}
+              renderItem={({item}) => (
+                <Box style={s.podcastsContainer}>
+                  <Box key={item.id} p="sm" style={s.eachPodcast}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('PodcastDetails', {
+                          params: podcast,
+                        })
+                      }>
+                      <Image
+                        source={{uri: item.thumbnail}}
+                        style={s.thumbnail}
+                      />
+                    </TouchableOpacity>
+                    <Text numberOfLines={2} size="s" style={s.title}>
+                      {item.title}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+            />
+          )}
         </Box>
       </Box>
-      <Text size="lg" color="red">
-        LISTEN NOW{' '}
-      </Text>
-    </Box>
+    </ScrollView>
   );
 };
 
 const s = StyleSheet.create({
   thumbnail: {
-    height: 75,
-    width: 75,
+    height: 90,
+    width: 90,
     borderRadius: 10,
   },
   bgWhite: {
@@ -108,6 +228,7 @@ const s = StyleSheet.create({
   },
   title: {
     flex: 1,
+    fontSize: 11,
   },
   podcasts: {
     display: 'flex',
@@ -118,12 +239,9 @@ const s = StyleSheet.create({
     alignContent: 'stretch',
   },
   eachPodcast: {
-    width: 100,
+    width: 105,
   },
-  title: {
-    fontSize: 12,
-    letterSpacing: 0.5,
-  },
+
   header: {
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 3,
@@ -147,7 +265,8 @@ const s = StyleSheet.create({
     marginBottom: 5,
   },
   podcastsContainer: {
-    paddingLeft: 5,
+    display: 'flex',
+    justifyContent: 'space-evenly',
   },
   headerIconsContiner: {
     display: 'flex',
